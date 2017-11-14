@@ -22,9 +22,8 @@ namespace BotPlayground.Dialogs
             var timestamp = activity.Timestamp;
             var url = "https://example.com";
 
-            // calculate something for us to return
-            int length = (activity.Text ?? string.Empty).Length;
             var message = $"{user} completed a poor call at {timestamp}, [click here]({url}) for details.";
+            // context.Activity.ChannelId;
 
             // return our reply to the user
             await context.PostAsync(message);
