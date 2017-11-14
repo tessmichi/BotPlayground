@@ -305,4 +305,5 @@ __pycache__/
 OpenCover/
 
 # Config files
-./BotPlayground/Web.*.config
+BotPlayground/Web.Debug.config
+BotPlayground/Web.Release.config
