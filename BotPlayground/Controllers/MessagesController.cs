@@ -1,5 +1,6 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using Microsoft.Bot.Connector.Teams.Models;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -40,6 +41,11 @@ namespace BotPlayground
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
+                TeamsChannelData channelData = message.GetChannelData<TeamsChannelData>();
+                if(channelData.EventType == "ChannelCreated")
+                {
+                    Conversation.SendAsync(message, () => new Dialogs.SetupDialog());
+                }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {
