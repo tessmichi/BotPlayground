@@ -18,12 +18,16 @@ namespace BotPlayground.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
             var activity = await result as Activity;
+            var user = activity.From.Name;
+            var timestamp = activity.Timestamp;
+            var url = "https://example.com";
 
             // calculate something for us to return
             int length = (activity.Text ?? string.Empty).Length;
+            var message = $"{user} completed a poor call at {timestamp}, [click here]({url}) for details.";
 
             // return our reply to the user
-            await context.PostAsync($"You sent {activity.Text} which was {length} characters");
+            await context.PostAsync(message);
 
             context.Wait(MessageReceivedAsync);
         }
