@@ -1,0 +1,87 @@
+{
+  "$schema": "https://statics.teams.microsoft.com/sdk/v1.0/manifest/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.0",
+  "version": "1.0.0",
+  "id": "",
+  "packageName": "net.azurewebsites.bottplayground",
+  "developer": {
+      "name": "tessmichi",
+      "websiteUrl": "https://github.com/tessmichi/BotPlayground",
+      "privacyUrl": "https://www.microsoft.com/privacy",
+      "termsOfUseUrl": "https://www.microsoft.com/termsofuse"
+  },
+  "name": {
+      "short": "Playground Bot",
+      "full": "This is a bot whose goal is to be a playground"
+  },
+  "description": {
+      "short": "This is a bot whose goal is to be a playground",
+      "full": "This is a bot app we use for learning about new bot features"
+  },
+  "icons": {
+      "outline": "contoso20x20.png",
+      "color": "contoso96x96.png"
+  },
+  "accentColor": "#ff0044",
+  "staticTabs": [
+      {
+          "entityId": "info",
+          "name": "Info",
+          "contentUrl": "https://www.google.com/",
+          "websiteUrl": "https://www.google.com/",
+          "scopes": [
+              "personal"
+          ]
+      }
+  ],
+  "configurableTabs": [
+      {
+          "configurationUrl": "https://bottplayground.azurewebsites.net/tabs/configure",
+          "canUpdateConfiguration": true,
+          "scopes": [
+              "team"
+          ]
+      }
+  ],
+  "bots": [
+      {
+          "botId": "",
+          "isNotificationOnly": false,
+          "scopes": [
+              "team",
+              "personal"
+          ],
+          "commandLists": [
+              {
+                  "scopes": [
+                      "team",
+                      "personal"
+                  ],
+                  "commands": [
+                      {
+                          "title": "help",
+                          "description": "Find out what I can do"
+                      }
+                  ]
+              }
+          ]
+      }
+  ],
+  "composeExtensions": [
+      {
+          "botId": "",
+          "scopes": [
+              "personal",
+              "team"
+          ]
+      }
+  ],
+  "permissions": [
+      "identity",
+      "messageTeamMembers"
+  ],
+  "validDomains": [
+      "bottplayground.azurewebsites.net",
+      "*.bottplayground.azurewebsites.net"
+  ]
+}
