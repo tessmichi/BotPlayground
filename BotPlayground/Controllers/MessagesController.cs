@@ -1,6 +1,8 @@
-﻿using Microsoft.Bot.Builder.Dialogs;
+﻿using BotPlayground.Utils;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Teams.Models;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -27,13 +29,13 @@ namespace BotPlayground
             }
             else
             {
-                HandleSystemMessage(activity);
+                await HandleSystemMessage(activity);
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
         }
 
-        private Activity HandleSystemMessage(Activity message)
+        private async Task<Activity> HandleSystemMessage(Activity message)
         {
             if (message.Type == ActivityTypes.DeleteUserData)
             {
@@ -46,9 +48,27 @@ namespace BotPlayground
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
                 TeamsChannelData channelData = message.GetChannelData<TeamsChannelData>();
-                if(channelData.EventType == "ChannelCreated")
+                if(channelData.EventType == "channelCreated")
                 {
-                    Conversation.SendAsync(message, () => new Dialogs.NewChannelDialog());
+                    var connector = new ConnectorClient(new Uri(message.ServiceUrl));
+                    IMessageActivity newMessage = Activity.CreateMessageActivity();
+                    newMessage.Type = ActivityTypes.Message;
+                    newMessage.Text = $"Hello!  I noticed you created the " + channelData.Channel.Name + " channel.  I'll send notifications here as I receive them."
+                         + "  Here's the channel ID: " + channelData.Channel.Id;
+                    var stateClient = message.GetStateClient();
+                    ConversationParameters conversationParams = new ConversationParameters(
+                        isGroup: true,
+                        bot: null,
+                        members: null,
+                        topicName: "Test Conversation",
+                        activity: (Activity)newMessage,
+                        channelData: channelData);
+
+                    var result = await connector.Conversations.CreateConversationAsync(conversationParams);
+
+                    BotData userData = await stateClient.BotState.GetUserDataAsync(message.ChannelId, message.From.Id);
+                    userData.SetProperty(channelData.Channel.Id, new ChannelDataInfo(message.ServiceUrl, channelData));
+                    await stateClient.BotState.SetUserDataAsync(message.ChannelId, message.From.Id, userData);
                 }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
