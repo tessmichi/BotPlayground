@@ -17,7 +17,8 @@ namespace BotPlayground
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type == ActivityTypes.Message && activity.From.Equals("PowerSuite")) // TODO more secure check
+            if (activity.ServiceUrl.Equals("https://directline.botframework.com/") &&
+                activity.ChannelId.Equals("directline")) // TODO more secure check
             {
                 await Conversation.SendAsync(activity, () => new Dialogs.ExternalEventDialog());
             }

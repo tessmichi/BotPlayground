@@ -1,14 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.Bot.Builder.ConnectorEx;
+﻿using BotPlayground.Models;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using Microsoft.Bot.Connector.Teams.Models;
 using Newtonsoft.Json;
-using Microsoft.Bot.Builder.Dialogs.Internals;
-using Autofac;
-using BotPlayground.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace BotPlayground.Dialogs
 {
@@ -26,19 +22,31 @@ namespace BotPlayground.Dialogs
             var payload = message.Text;
 
             var parsedPayload = JsonConvert.DeserializeObject<NotificationEvent>(payload);
-
-            var userAccount = new ChannelAccount(parsedPayload.ChannelUrl); // TODO CHECK THIS
-            var botAccount = new ChannelAccount(message.Recipient.Id, message.Recipient.Name);
-            var connector = new ConnectorClient(new Uri(parsedPayload.ServiceUrl)); // TODO CHECK THIS
+            
+            var channelData = parsedPayload.ChannelData;
             IMessageActivity notificationMessage = Activity.CreateMessageActivity();
-            var conversationId = (await connector.Conversations.CreateDirectConversationAsync(botAccount, userAccount)).Id;
-
-            notificationMessage.ChannelId = parsedPayload.ChannelId;
-            notificationMessage.From = botAccount;
-            notificationMessage.Recipient = userAccount;
-            notificationMessage.Conversation = new ConversationAccount(id: conversationId);
+            notificationMessage.Type = ActivityTypes.Message;
             notificationMessage.Text = $"You said {payload}";
             notificationMessage.Locale = "en-us";
+            notificationMessage.ChannelId = channelData.Channel.Id;
+            ConversationParameters conversationParams = new ConversationParameters(
+                isGroup: true,
+                bot: null,
+                members: null,
+                topicName: "Test Conversation",
+                activity: (Activity)notificationMessage,
+                channelData: channelData);
+            var connector = new ConnectorClient(new Uri(parsedPayload.ServiceUrl));
+            var r = await connector.Conversations.CreateConversationAsync(conversationParams);
+                        
+            //var userAccount = new ChannelAccount(parsedPayload.ChannelUri); // TODO CHECK THIS
+            //var botAccount = new ChannelAccount(message.Recipient.Id, message.Recipient.Name);
+            //var connector = new ConnectorClient(new Uri(parsedPayload.ServiceUrl)); // TODO CHECK THIS
+            //IMessageActivity notificationMessage = Activity.CreateMessageActivity();
+            ////var conversationId = (await connector.Conversations.CreateDirectConversationAsync(botAccount, userAccount)).Id;
+            //notificationMessage.From = botAccount;
+            //notificationMessage.Recipient = userAccount;
+
             await connector.Conversations.SendToConversationAsync((Activity)notificationMessage);
             
             context.Wait(MessageReceivedAsync);

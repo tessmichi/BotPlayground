@@ -1,9 +1,10 @@
-﻿namespace BotPlayground.Models
+﻿using Microsoft.Bot.Connector.Teams.Models;
+
+namespace BotPlayground.Models
 {
     public class NotificationEvent
     {
-        public string ChannelUrl { get; set; }
-        public string ServiceUrl { get; set; }
-        public string ChannelId { get; set; }
+        public TeamsChannelData ChannelData { get; set; }
+        public string ServiceUrl { get; set; } = "https://smba.trafficmanager.net/amer-client-ss.msg/";
     }
 }
