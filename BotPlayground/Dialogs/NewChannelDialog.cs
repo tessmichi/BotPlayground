@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BotPlayground.Dialogs
 {
     [Serializable]
-    public class SetupDialog : IDialog<object>
+    public class NewChannelDialog : IDialog<object>
     {
         public Task StartAsync(IDialogContext context)
         {

@@ -19,7 +19,11 @@ namespace BotPlayground
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                await Conversation.SendAsync(activity, () => new Dialogs.EventDialog());
+            }
+            else if (activity.Type == ActivityTypes.Event)
+            {
+                await Conversation.SendAsync(activity, () => new Dialogs.EventDialog());
             }
             else
             {
@@ -44,7 +48,7 @@ namespace BotPlayground
                 TeamsChannelData channelData = message.GetChannelData<TeamsChannelData>();
                 if(channelData.EventType == "ChannelCreated")
                 {
-                    Conversation.SendAsync(message, () => new Dialogs.SetupDialog());
+                    Conversation.SendAsync(message, () => new Dialogs.NewChannelDialog());
                 }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
