@@ -17,7 +17,11 @@ namespace BotPlayground
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type == ActivityTypes.Message)
+            if (activity.Type == ActivityTypes.Message && activity.From.Equals("PowerSuite")) // TODO more secure check
+            {
+                await Conversation.SendAsync(activity, () => new Dialogs.ExternalEventDialog());
+            }
+            else if (activity.Type == ActivityTypes.Message)
             {
                 await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
             }
@@ -28,7 +32,7 @@ namespace BotPlayground
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
         }
-
+        
         private Activity HandleSystemMessage(Activity message)
         {
             if (message.Type == ActivityTypes.DeleteUserData)
