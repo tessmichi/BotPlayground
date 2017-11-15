@@ -1,7 +1,6 @@
 ﻿using BotPlayground.Models;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using Microsoft.Bot.Connector.Teams.Models;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
@@ -22,7 +21,8 @@ namespace BotPlayground.Dialogs
             var payload = message.Text;
 
             var parsedPayload = JsonConvert.DeserializeObject<NotificationEvent>(payload);
-            
+
+            var channelId = parsedPayload.TeamsChannelId;
             var channelData = parsedPayload.ChannelData;
             IMessageActivity notificationMessage = Activity.CreateMessageActivity();
             notificationMessage.Type = ActivityTypes.Message;
