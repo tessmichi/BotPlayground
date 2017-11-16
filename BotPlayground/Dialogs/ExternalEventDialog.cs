@@ -32,7 +32,7 @@ namespace BotPlayground.Dialogs
             };
             IMessageActivity notificationMessage = Activity.CreateMessageActivity();
             notificationMessage.Type = ActivityTypes.Message;
-            notificationMessage.Text = $"You said {payload}";
+            notificationMessage.Text = $"Guess what I just heard? {payload}";
 
             ConversationParameters conversationParams = new ConversationParameters(
                 isGroup: true,
