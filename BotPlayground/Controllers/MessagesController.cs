@@ -66,7 +66,7 @@ namespace BotPlayground
                         isGroup: true,
                         bot: null,
                         members: null,
-                        topicName: channelData.Channel.Name + " Created",
+                        topicName: channelData.Channel.Name + " created",
                         activity: (Activity)newMessage,
                         channelData: channelData);
 
