@@ -55,6 +55,8 @@ namespace BotPlayground
                 TeamsChannelData channelData = message.GetChannelData<TeamsChannelData>();
                 if(channelData.EventType == "channelCreated")
                 {
+                    // HERE is where you will replace printing out the channel id with storing it in your database
+
                     var connector = new ConnectorClient(new Uri(message.ServiceUrl));
                     IMessageActivity newMessage = Activity.CreateMessageActivity();
                     newMessage.Type = ActivityTypes.Message;
