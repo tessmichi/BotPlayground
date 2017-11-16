@@ -38,7 +38,7 @@ namespace BotPlayground.Dialogs
                 isGroup: true,
                 bot: null,
                 members: null,
-                topicName: "Bad Call Notification",
+                topicName: "Something Happened - Notification",
                 activity: (Activity)notificationMessage,
                 channelData: channelData);
             var connector = new ConnectorClient(

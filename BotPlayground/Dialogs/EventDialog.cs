@@ -24,7 +24,7 @@ namespace BotPlayground.Dialogs
             var timestamp = activity.Timestamp;
             var url = "https://example.com";
 
-            var message = $"{user} completed a poor call at {timestamp}, [click here]({url}) for details.";
+            var message = $"{user} sent a message at {timestamp}, [click here]({url}) for details.";
 
             // return our reply to the user
             await context.PostAsync(message);
