@@ -17,6 +17,8 @@ namespace BotPlayground.Dialogs
 
         private async Task EventReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
+            // This is just to test pinging via teams message, tagging the bot
+
             var activity = await result as Activity;
             var user = activity.From.Name;
             var timestamp = activity.Timestamp;

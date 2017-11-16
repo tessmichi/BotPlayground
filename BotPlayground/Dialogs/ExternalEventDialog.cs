@@ -1,8 +1,10 @@
 ﻿using BotPlayground.Models;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using Microsoft.Bot.Connector.Teams.Models;
 using Newtonsoft.Json;
 using System;
+using System.Configuration;
 using System.Threading.Tasks;
 
 namespace BotPlayground.Dialogs
@@ -19,37 +21,32 @@ namespace BotPlayground.Dialogs
         {
             var message = await result;
             var payload = message.Text;
-
             var parsedPayload = JsonConvert.DeserializeObject<NotificationEvent>(payload);
 
+            MicrosoftAppCredentials.TrustServiceUrl(parsedPayload.TeamsServiceUrl);
+            
             var channelId = parsedPayload.TeamsChannelId;
-            var channelData = parsedPayload.ChannelData;
+            var channelData = new TeamsChannelData {
+                Channel = new ChannelInfo(id:channelId),
+                EventType = "message"
+            };
             IMessageActivity notificationMessage = Activity.CreateMessageActivity();
             notificationMessage.Type = ActivityTypes.Message;
             notificationMessage.Text = $"You said {payload}";
-            notificationMessage.Locale = "en-us";
-            notificationMessage.ChannelId = channelData.Channel.Id;
+
             ConversationParameters conversationParams = new ConversationParameters(
                 isGroup: true,
                 bot: null,
                 members: null,
-                topicName: "Test Conversation",
+                topicName: "Bad Call Notification",
                 activity: (Activity)notificationMessage,
                 channelData: channelData);
-            var connector = new ConnectorClient(new Uri(parsedPayload.ServiceUrl));
-            var r = await connector.Conversations.CreateConversationAsync(conversationParams);
-                        
-            //var userAccount = new ChannelAccount(parsedPayload.ChannelUri); // TODO CHECK THIS
-            //var botAccount = new ChannelAccount(message.Recipient.Id, message.Recipient.Name);
-            //var connector = new ConnectorClient(new Uri(parsedPayload.ServiceUrl)); // TODO CHECK THIS
-            //IMessageActivity notificationMessage = Activity.CreateMessageActivity();
-            ////var conversationId = (await connector.Conversations.CreateDirectConversationAsync(botAccount, userAccount)).Id;
-            //notificationMessage.From = botAccount;
-            //notificationMessage.Recipient = userAccount;
-
-            await connector.Conversations.SendToConversationAsync((Activity)notificationMessage);
+            var connector = new ConnectorClient(
+                new Uri(parsedPayload.TeamsServiceUrl),
+                ConfigurationManager.AppSettings["MicrosoftAppId"],
+                ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
             
-            context.Wait(MessageReceivedAsync);
+            var test = await connector.Conversations.CreateConversationAsync(conversationParams);
         }
     }
 }
