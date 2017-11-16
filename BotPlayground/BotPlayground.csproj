@@ -121,7 +121,6 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\ExternalEventDialog.cs" />
     <Compile Include="Dialogs\EventDialog.cs" />
-    <Compile Include="Dialogs\NewChannelDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

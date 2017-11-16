@@ -26,7 +26,6 @@ namespace BotPlayground
             }
             else if (activity.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.EventDialog());
             }
             else if (activity.Type == ActivityTypes.Event)
             {
@@ -67,15 +66,16 @@ namespace BotPlayground
                         isGroup: true,
                         bot: null,
                         members: null,
-                        topicName: "Test Conversation",
+                        topicName: channelData.Channel.Name + " Created",
                         activity: (Activity)newMessage,
                         channelData: channelData);
 
                     var result = await connector.Conversations.CreateConversationAsync(conversationParams);
 
-                    BotData userData = await stateClient.BotState.GetUserDataAsync(message.ChannelId, message.From.Id);
-                    userData.SetProperty(channelData.Channel.Id, new ChannelDataInfo(message.ServiceUrl, channelData));
-                    await stateClient.BotState.SetUserDataAsync(message.ChannelId, message.From.Id, userData);
+                    // TODO: Save this data to an external store for use later.  For the hack, we will just manually track the info we care about.
+                    // BotData userData = stateClient.BotState.GetConversationData(message.ChannelId, result.Id);
+                    // userData.SetProperty(channelData.Channel.Id, new ChannelDataInfo(message.ServiceUrl, channelData));
+                    // await stateClient.BotState.SetUserDataAsync(message.ChannelId, message.From.Id, userData);
                 }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
