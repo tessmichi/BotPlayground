@@ -25,6 +25,10 @@ namespace BotPlayground.Dialogs
 
             MicrosoftAppCredentials.TrustServiceUrl(parsedPayload.TeamsServiceUrl);
             
+            // We are parsing the payload, based on information that was printed at the start of the conversation
+            // The reason we get it from the payload here is simply because, for this example, the messages
+            // being sent through DirectLine are formatted with the information that was saved in the external
+            // database when it was initially saved. Saving the data to the database is not in this repo though
             var channelId = parsedPayload.TeamsChannelId;
             var channelData = new TeamsChannelData {
                 Channel = new ChannelInfo(id:channelId),
